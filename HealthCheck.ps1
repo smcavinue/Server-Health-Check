@@ -134,7 +134,8 @@ return $false
 function htmlOutput{
  param( [Array[]]$results, [String] $computername)
   write-host Creating html log for $computername -foregroundcolor Green
-ConvertTo-Html -Head $computername -inputobject $results | out-file ("C:\TATTesting\" + $computername + ".html")
+  ConvertTo-Html -Head $computername -inputobject $results -title ($computername + " TAT Test Results") -as list | out-file ("C:\TATTesting\" + $computername + ".html")
+
 
 }
 main
