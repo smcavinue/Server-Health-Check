@@ -135,7 +135,7 @@ function htmlOutput{
  param( [array] $results, [String] $computername)
  write-host Creating html log for $computername -foregroundcolor yellow
  $path = ("TATTestResults." + (get-date).Date.ToString().Replace('/','.').Replace(' ','').Replace(':',''))
- $results | ConvertTo-Html -Head $computername -title "TAT Test Results " -as list | out-file ("C:\TATTesting\" + $path + "html") -Append
+ $results | ConvertTo-Html -Head $computername -title "TAT Test Results " -as list | out-file ("C:\TATTesting\" + $path + ".html") -Append
 
 }
 main
