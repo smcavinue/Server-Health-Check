@@ -17,11 +17,11 @@ foreach($server in $servers){
 
 
 ##nullifies return values##
-$results.trust = $false
-$results.logs = $true
-$results.ping = $false
-$results.web = $false
-$results.vmtools = $false
+$results.trust = "error"
+$results.logs = "error"
+$results.ping = "error"
+$results.web = "error"
+$results.vmtools = "error"
 
 ##calls funtions to test server functionality and return values##
 $results.trust = domaintrusttest $server.name
@@ -45,9 +45,9 @@ $trust = test-computersecurechannel -Server $computerName
 }
 
 if(!$trust){
-return $false
+return "Not Working"
 }else{
-return $true
+return "Working"
 }
 
 }
@@ -84,9 +84,9 @@ $log | export-csv $logname -NoClobber -NoTypeInformation -Append
 }
 }
 if(Test-Path ("c:\TATTesting\" + $logname)){
-return $true
+return "Errors Logged in C:\TATTesting\"
 }else{
-return $false
+return "No New Errors"
 }
 }
 
@@ -97,9 +97,9 @@ function PingTest{
  $pingtest = Test-Connection $ComputerName -quiet -count 2
 
  if($pingtest){
- return $true
+ return "Working"
  }else{
- return $false
+ return "Not Working"
  }
 
 
@@ -111,9 +111,9 @@ function webtest{
      write-host Checking web access on $computername -foregroundcolor Green
 $webrequest = Invoke-Command -ScriptBlock{Invoke-WebRequest -Uri https://www.google.com -UseBasicParsing} -ComputerName $computername 
 if($webrequest.statuscode){
-return $true
+return "Working"
 }else{
-return $false
+return "Not Working"
 }
 }
 
@@ -124,18 +124,18 @@ function vmtoolstest{
 $vmtools = Get-Service -ComputerName $computername -Name vmtools
 
 if($vmtools.status -like "running"){
-return $true
+return "Running"
 }else{
-return $false
+return "Not Running"
 }
 }
 
 ##Outputs results variable to a HTML file##
 function htmlOutput{
- param( [Array[]]$results, [String] $computername)
-  write-host Creating html log for $computername -foregroundcolor Green
-  ConvertTo-Html -Head $computername -inputobject $results -title ($computername + " TAT Test Results") -as list | out-file ("C:\TATTesting\" + $computername + ".html")
-
+ param( [array] $results, [String] $computername)
+ write-host Creating html log for $computername -foregroundcolor yellow
+ $path = ("TATTestResults." + (get-date).Date.ToString().Replace('/','.').Replace(' ','').Replace(':',''))
+ $results | ConvertTo-Html -Head $computername -title "TAT Test Results " -as list | out-file ("C:\TATTesting\" + $path + "html") -Append
 
 }
 main
