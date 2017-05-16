@@ -32,6 +32,7 @@ $results.vmtools = vmtoolstest $server.name
 htmloutput $results $server.name
 }
 }
+
 ##Tests the domain trust and returns true or false value, also attempts trust repair once##
 function domaintrusttest{
  param( [String]$ComputerName)
@@ -133,8 +134,7 @@ return $false
 function htmlOutput{
  param( [Array[]]$results, [String] $computername)
   write-host Creating html log for $computername -foregroundcolor Green
-ConvertTo-Html -Head $computername -body $results | out-file ("C:\TATTesting\" + $computername + ".html")
+ConvertTo-Html -Head $computername -inputobject $results | out-file ("C:\TATTesting\" + $computername + ".html")
 
 }
 main
-
