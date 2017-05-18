@@ -57,6 +57,7 @@ return "Working"
 function EventlogTest{
  param( [String]$ComputerName)
   write-host Checking event log on $computername -foregroundcolor Green
+  $logname = $computername + ".csv"
 if(!(test-path C:\TATTesting)){
 mkdir c:\TATTesting
 }
@@ -78,7 +79,7 @@ $new = $false
 
 }
 if($new){
-$logname = $log.machinename + ".csv"
+
 $log | export-csv $logname -NoClobber -NoTypeInformation -Append
 
 }
@@ -89,6 +90,7 @@ return "Errors Logged in C:\TATTesting\"
 return "No New Errors"
 }
 }
+
 
 ##Tests ping to server and returns true or false based on success##
 function PingTest{
