@@ -64,10 +64,10 @@ mkdir c:\TATTesting
 CD c:\TATTesting
 
 
-$control = Get-EventLog -After (Get-Date).AddDays(-8) -Before (Get-Date).AddHours(-8) -LogName application -EntryType error -ComputerName $computername
-$control +=  Get-EventLog -After (Get-Date).AddDays(-8) -Before (Get-Date).AddHours(-8) -LogName system -EntryType error -ComputerName $computername
-$today = Get-EventLog -After (Get-Date).AddHours(-8) -LogName application -EntryType error -ComputerName $computername
-$today += Get-EventLog -After (Get-Date).AddHours(-8) -LogName system -EntryType error -ComputerName $computername
+$control = invoke-command  -ComputerName $computername  -scriptblock {Get-EventLog -After (Get-Date).AddDays(-8) -Before (Get-Date).AddHours(-8) -LogName application -EntryType error}
+$control += invoke-command  -ComputerName $computername  -scriptblock  {Get-EventLog -After (Get-Date).AddDays(-8) -Before (Get-Date).AddHours(-8) -LogName system -EntryType error}
+$today = invoke-command  -ComputerName $computername  -scriptblock  {Get-EventLog -After (Get-Date).AddHours(-8) -LogName application -EntryType error}
+$today += invoke-command  -ComputerName $computername  -scriptblock  {Get-EventLog -After (Get-Date).AddHours(-8) -LogName system -EntryType error} 
 $new = $false
 foreach($log in $today){
 $new = $true
